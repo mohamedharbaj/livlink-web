@@ -17,7 +17,7 @@ export default function AdsBoard({ lang, initial, fixedCity }: { lang: Lang; ini
   const list = useMemo(() => ads.filter((a) => (!type || a.roleType === type) && (!district || a.district === district) && (!q || (a.title + a.details).includes(q))), [ads, type, district, q]);
   const onDelete = async (a: Ad) => { if (!confirm(t.delAsk)) return; try { await remove(a.id); } catch { alert(t.eFail); } };
   return (
-    <section className="mx-auto max-w-5xl px-4 py-8">
+    <section className="mx-auto max-w-5xl px-4 py-5">
       <div className="grid gap-2 sm:grid-cols-3">
         {!fixedCity && (
           <select className="field" aria-label={t.city} value={city} onChange={(e) => { setCity(e.target.value); setDistrict(''); }}>
