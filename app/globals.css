@@ -1,0 +1,9 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+@layer base { html { color-scheme: dark; } body { @apply bg-ink text-fg antialiased; } }
+@layer components {
+  .btn { @apply inline-flex items-center rounded-lg px-3 py-2 text-sm font-bold transition-colors; }
+  .field { @apply w-full rounded-lg border border-line bg-panel px-3 py-2.5 text-sm text-fg placeholder:text-mute focus:border-rider focus:outline-none; }
+}
+:focus-visible { outline: 2px solid #EA580C; outline-offset: 2px; }
