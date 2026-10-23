@@ -9,12 +9,12 @@ export default async function Home({ params }: { params: { lang: Lang } }) {
   const lang = params.lang, t = T[lang], ads = await fetchAds();
   return (
     <>
-      <section className="mx-auto max-w-5xl px-4 pt-10">
-        <h1 className="text-3xl font-extrabold leading-tight sm:text-5xl">{t.tag}</h1>
-        <p className="mt-3 max-w-xl text-mute">{t.desc}</p>
-        <div className="mt-6 grid gap-3 sm:grid-cols-2">
-          <Link href={`/${lang}/add?type=request`} className="rounded-2xl bg-shop p-5"><b className="block text-lg">{t.shopCta}</b><span className="text-sm text-white/80">{t.shopSub}</span></Link>
-          <Link href={`/${lang}/add?type=offer`} className="rounded-2xl bg-rider p-5"><b className="block text-lg">{t.driverCta}</b><span className="text-sm text-white/80">{t.driverSub}</span></Link>
+      <section className="mx-auto max-w-5xl px-4 pt-5 text-center">
+        <h1 className="sr-only">{t.tag}</h1>
+        <p className="mx-auto max-w-xl text-sm text-mute sm:text-base">{t.desc}</p>
+        <div className="mt-4 grid grid-cols-2 gap-2 sm:gap-3">
+          <Link href={`/${lang}/add?type=request`} className="rounded-xl bg-shop px-3 py-3 text-start"><b className="block text-sm sm:text-base">{t.shopCta}</b><span className="mt-0.5 block text-xs text-white/80">{t.shopSub}</span></Link>
+          <Link href={`/${lang}/add?type=offer`} className="rounded-xl bg-rider px-3 py-3 text-start"><b className="block text-sm sm:text-base">{t.driverCta}</b><span className="mt-0.5 block text-xs text-white/80">{t.driverSub}</span></Link>
         </div>
       </section>
       <AdsBoard lang={lang} initial={ads} />
