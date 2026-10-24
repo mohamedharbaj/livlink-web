@@ -37,11 +37,14 @@ export default function AddForm({ lang }: { lang: Lang }) {
     setBusy(true);
     try {
       if ((await myAdsCount(uid)) >= MAX_ADS) { setErr(t.eLimit); setBusy(false); return; }
+      // إلا كتب الليفرور نوع المركبة فالاسم (يوسف - دراجة نارية) كنستعملوه كما هو ما نكرروهش
+      const typed = [...VEHICLES].sort((x, y) => y.length - x.length).find((v) => label.includes(v));
+      const vehicle = offer ? (typed ?? f.vehicle) : f.vehicle;
       await publish({
-        title: offer ? `${label} - ${f.vehicle}` : label, city: f.city, district: f.district || 'اختر الحي', roleType: type,
+        title: offer ? (typed ? label : `${label} - ${f.vehicle}`) : label, city: f.city, district: f.district || 'اختر الحي', roleType: type,
         phone: f.phone.replace(/[^\d+]/g, ''),
-        details: f.details.trim() || (offer ? `سائق ${f.vehicle} جاهز للتوصيل الفوري بمدينة ${f.city}` : `طلب توصيل طلبيات بمدينة ${f.city}`),
-        vehicleType: offer ? f.vehicle : REQUEST, priceEstimate: 'حسب الاتفاق', createdAt: Date.now(), ownerId: uid,
+        details: f.details.trim() || (offer ? `سائق ${vehicle} جاهز للتوصيل الفوري بمدينة ${f.city}` : `طلب توصيل طلبيات بمدينة ${f.city}`),
+        vehicleType: offer ? vehicle : REQUEST, priceEstimate: 'حسب الاتفاق', createdAt: Date.now(), ownerId: uid,
         ...(!offer && loc ? { latitude: loc.lat, longitude: loc.lng } : {}),
         ...(!offer && addr.trim() ? { locationAddress: addr.trim() } : {}),
       });
@@ -58,7 +61,7 @@ export default function AddForm({ lang }: { lang: Lang }) {
       </div>
       {offer ? (
         <>
-          <input className="field" placeholder={t.name} maxLength={60} value={f.name} onChange={set('name')} />
+          <input className="field" placeholder={t.name} maxLength={80} value={f.name} onChange={set('name')} />
           <select className="field" aria-label={t.vehicle} value={f.vehicle} onChange={set('vehicle')}>{VEHICLES.map((v) => <option key={v}>{v}</option>)}</select>
         </>
       ) : (
