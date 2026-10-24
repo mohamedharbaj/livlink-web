@@ -24,3 +24,6 @@ export const myAdsCount = async (uid: string) =>
 export const publish = (a: Omit<Ad, 'id'>) =>
   setDoc(doc(collection(db(), 'ads')), { ...a, expiresAt: Timestamp.fromMillis(a.createdAt + TTL) });
 export const remove = (id: string) => deleteDoc(doc(db(), 'ads', id));
+// Report an ad (same rules as the Android app: one report per user per ad, id = adId_uid)
+export const report = (adId: string, uid: string, reason: string) =>
+  setDoc(doc(db(), 'reports', `${adId}_${uid}`), { adId, reporterId: uid, reason, createdAt: Date.now() });
