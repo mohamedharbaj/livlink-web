@@ -11,10 +11,22 @@ export default function AddForm({ lang }: { lang: Lang }) {
   const [type, setType] = useState(sp.get('type') === 'offer' ? OFFER : REQUEST);
   const [f, setF] = useState({ name: '', title: '', vehicle: VEHICLES[0], city: '', district: '', phone: '', details: '' });
   const [err, setErr] = useState(''), [busy, setBusy] = useState(false);
+  const [loc, setLoc] = useState<{ lat: number; lng: number } | null>(null);
+  const [addr, setAddr] = useState(''), [showAddr, setShowAddr] = useState(false), [locBusy, setLocBusy] = useState(false);
   const offer = type === OFFER, accent = offer ? 'bg-rider' : 'bg-shop';
   const set = (k: string) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement | HTMLTextAreaElement>) =>
     setF({ ...f, [k]: e.target.value, ...(k === 'city' ? { district: '' } : {}) });
   const districts = (DISTRICTS[f.city] ?? []).filter((d) => d !== 'اختر الحي' && d !== 'جميع الأحياء');
+  const getGps = () => {
+    setErr('');
+    if (!navigator.geolocation) return setErr(t.locErr);
+    setLocBusy(true);
+    navigator.geolocation.getCurrentPosition(
+      (p) => { setLoc({ lat: +p.coords.latitude.toFixed(5), lng: +p.coords.longitude.toFixed(5) }); setLocBusy(false); },
+      () => { setErr(t.locErr); setLocBusy(false); },
+      { enableHighAccuracy: true, timeout: 10000 },
+    );
+  };
   const submit = async (e: React.FormEvent) => {
     e.preventDefault(); setErr('');
     const label = (offer ? f.name : f.title).trim();
@@ -30,6 +42,8 @@ export default function AddForm({ lang }: { lang: Lang }) {
         phone: f.phone.replace(/[^\d+]/g, ''),
         details: f.details.trim() || (offer ? `سائق ${f.vehicle} جاهز للتوصيل الفوري بمدينة ${f.city}` : `طلب توصيل طلبيات بمدينة ${f.city}`),
         vehicleType: offer ? f.vehicle : REQUEST, priceEstimate: 'حسب الاتفاق', createdAt: Date.now(), ownerId: uid,
+        ...(!offer && loc ? { latitude: loc.lat, longitude: loc.lng } : {}),
+        ...(!offer && addr.trim() ? { locationAddress: addr.trim() } : {}),
       });
       router.push(`/${lang}`);
     } catch { setErr(t.eFail); setBusy(false); }
@@ -60,6 +74,23 @@ export default function AddForm({ lang }: { lang: Lang }) {
       )}
       <input className="field" dir="ltr" inputMode="tel" placeholder={`${t.phone} 06XXXXXXXX`} value={f.phone} onChange={set('phone')} />
       <textarea className="field" rows={4} maxLength={600} placeholder={t.details} value={f.details} onChange={set('details')} />
+      {!offer && (
+        <div className="rounded-xl border border-line bg-panel p-3">
+          <p className="text-sm font-bold">📍 {t.locTitle}</p>
+          <p className="mt-1 text-xs leading-relaxed text-mute">{t.locHint}</p>
+          <div className="mt-3 grid grid-cols-2 gap-2">
+            <button type="button" onClick={getGps} disabled={locBusy} className="btn justify-center bg-shop text-white disabled:opacity-60">{locBusy ? t.locBusy : t.locGps}</button>
+            <button type="button" onClick={() => setShowAddr(!showAddr)} aria-expanded={showAddr} className="btn justify-center border border-line">{t.locManual}</button>
+          </div>
+          {loc && (
+            <p className="mt-2 flex items-center justify-between text-xs text-green-400">
+              <span>✓ {t.locDone}</span>
+              <button type="button" onClick={() => setLoc(null)} className="text-mute underline">{t.locClear}</button>
+            </p>
+          )}
+          {showAddr && <input className="field mt-2" placeholder={t.locAddr} maxLength={300} value={addr} onChange={(e) => setAddr(e.target.value)} />}
+        </div>
+      )}
       {err && <p role="alert" className="text-sm text-red-400">{err}</p>}
       <button disabled={busy} className={`btn justify-center py-3 text-white disabled:opacity-60 ${accent}`}>{t.publish}</button>
       <p className="text-center text-xs text-mute">{t.foot}</p>
