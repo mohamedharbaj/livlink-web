@@ -2,8 +2,9 @@
 import { useEffect, useState } from 'react';
 import { Ad, OFFER, intl, mapUrl } from '@/lib/ads';
 import { T, Lang, ago, roleLabel } from '@/lib/i18n';
-export default function AdCard({ ad, lang, uid, onDelete }: { ad: Ad; lang: Lang; uid: string | null; onDelete: (a: Ad) => void }) {
-  const t = T[lang], offer = ad.roleType === OFFER, [when, setWhen] = useState('');
+export default function AdCard({ ad, lang, uid, onDelete, onReport }: { ad: Ad; lang: Lang; uid: string | null; onDelete: (a: Ad) => void; onReport: (a: Ad, reason: string) => void }) {
+  const t = T[lang], offer = ad.roleType === OFFER, [when, setWhen] = useState(''), [askReport, setAskReport] = useState(false);
+  const reasons: [string, string][] = [['spam', t.rSpam], ['scam', t.rScam], ['wrong', t.rWrong], ['other', t.rOther]];
   useEffect(() => setWhen(ago(ad.createdAt, lang)), [ad.createdAt, lang]);
   const ph = ad.phone.replace(/[^\d+]/g, ''), map = offer ? null : mapUrl(ad);
   const place = [ad.city, ad.district].filter((x) => x && x !== 'اختر الحي' && x !== 'جميع الأحياء').join(' • ');
@@ -23,7 +24,18 @@ export default function AdCard({ ad, lang, uid, onDelete }: { ad: Ad; lang: Lang
         <a href={`https://wa.me/${intl(ad.phone)}`} target="_blank" rel="noopener noreferrer" className="btn bg-green-600 text-white">{t.wa}</a>
         {map && <a href={map} target="_blank" rel="noopener noreferrer" className="btn bg-shop text-white">{t.map}</a>}
         {uid && uid === ad.ownerId && <button onClick={() => onDelete(ad)} className="btn ms-auto text-red-400">{t.del}</button>}
+        {uid && uid !== ad.ownerId && <button onClick={() => setAskReport(!askReport)} aria-expanded={askReport} className="btn ms-auto text-xs font-normal text-mute underline">{t.report}</button>}
       </div>
+      {askReport && (
+        <div className="mt-3 rounded-lg border border-line p-3">
+          <p className="mb-2 text-xs text-mute">{t.reportWhy}</p>
+          <div className="flex flex-wrap gap-2">
+            {reasons.map(([code, label]) => (
+              <button key={code} onClick={() => { setAskReport(false); onReport(ad, code); }} className="btn border border-line text-xs">{label}</button>
+            ))}
+          </div>
+        </div>
+      )}
     </article>
   );
 }
