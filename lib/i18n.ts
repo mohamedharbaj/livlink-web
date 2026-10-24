@@ -16,6 +16,11 @@ const ar = {
   wait: 'جاري الاتصال بالسيرفر...', req: 'طلب توصيل', off: 'عرض توصيل', now: 'الآن',
   foot: 'الإعلان كيتحيد بعد 7 أيام.',
   hero: 'اربط محلك بليفرور في دقائق',
+  citiesSub: 'اختار مدينتك وشوف الإعلانات القريبة منك', citiesBadge: 'تغطية وطنية',
+  locTitle: 'موقع المحل على الخريطة (اختياري)',
+  locHint: 'غادي يتنشر الموقع مع إعلانك باش يوصلو لك الليفرورات عبر الخريطة. ما كنستعملوه لشي غرض آخر.',
+  locGps: 'تحديد عبر GPS', locBusy: 'جاري التحديد...', locManual: 'إدخال يدوي', locDone: 'تم تحديد الموقع', locClear: 'مسح',
+  locAddr: 'العنوان (مثال: شارع محمد الخامس، قرب الصيدلية)', locErr: 'تعذر تحديد الموقع. فعّل الموقع وعاود المحاولة.',
   chips: ['مجاني 100٪', 'جميع مدن المغرب', 'تواصل مباشر بلا وسيط'],
 };
 const fr: typeof ar = {
@@ -33,6 +38,11 @@ const fr: typeof ar = {
   wait: 'Connexion au serveur...', req: 'Demande de livraison', off: 'Offre de livraison', now: "à l'instant",
   foot: 'Les annonces expirent après 7 jours.',
   hero: 'Connectez votre commerce à un livreur en quelques minutes',
+  citiesSub: 'Choisissez votre ville pour voir les annonces près de chez vous', citiesBadge: 'Couverture nationale',
+  locTitle: 'Position du commerce sur la carte (facultatif)',
+  locHint: 'La position sera publiée avec votre annonce pour que les livreurs vous trouvent sur la carte. Elle n’est utilisée à aucune autre fin.',
+  locGps: 'Localiser via GPS', locBusy: 'Localisation...', locManual: 'Saisie manuelle', locDone: 'Position enregistrée', locClear: 'Effacer',
+  locAddr: 'Adresse (ex : Avenue Mohammed V, près de la pharmacie)', locErr: 'Impossible de vous localiser. Activez la localisation et réessayez.',
   chips: ['100 % gratuit', 'Toutes les villes du Maroc', 'Contact direct sans intermédiaire'],
 };
 export const T = { ar, fr };
