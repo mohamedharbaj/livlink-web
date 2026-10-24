@@ -22,6 +22,8 @@ const ar = {
   locGps: 'تحديد عبر GPS', locBusy: 'جاري التحديد...', locManual: 'إدخال يدوي', locDone: 'تم تحديد الموقع', locClear: 'مسح',
   locAddr: 'العنوان (مثال: شارع محمد الخامس، قرب الصيدلية)', locErr: 'تعذر تحديد الموقع. فعّل الموقع وعاود المحاولة.',
   chips: ['مجاني 100٪', 'جميع مدن المغرب', 'تواصل مباشر بلا وسيط'],
+  report: 'إبلاغ', reportWhy: 'سبب البلاغ:', rSpam: 'سبام / مكرر', rScam: 'احتيال', rWrong: 'معلومات خاطئة', rOther: 'سبب آخر',
+  reportThanks: 'شكراً، توصلنا بالبلاغ وتم إخفاء الإعلان عنك.',
 };
 const fr: typeof ar = {
   tag: 'La plateforme qui relie commerçants et livreurs',
@@ -44,6 +46,8 @@ const fr: typeof ar = {
   locGps: 'Localiser via GPS', locBusy: 'Localisation...', locManual: 'Saisie manuelle', locDone: 'Position enregistrée', locClear: 'Effacer',
   locAddr: 'Adresse (ex : Avenue Mohammed V, près de la pharmacie)', locErr: 'Impossible de vous localiser. Activez la localisation et réessayez.',
   chips: ['100 % gratuit', 'Toutes les villes du Maroc', 'Contact direct sans intermédiaire'],
+  report: 'Signaler', reportWhy: 'Motif du signalement :', rSpam: 'Spam / doublon', rScam: 'Arnaque', rWrong: 'Infos erronées', rOther: 'Autre',
+  reportThanks: 'Merci, signalement reçu. L’annonce est masquée pour vous.',
 };
 export const T = { ar, fr };
 export const roleLabel = (l: Lang, r: string) => (r === OFFER ? T[l].off : T[l].req);
