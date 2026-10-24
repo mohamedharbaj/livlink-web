@@ -29,21 +29,31 @@ export default async function Home({ params }: { params: { lang: Lang } }) {
       </section>
       <AdsBoard lang={lang} initial={ads} />
       <nav className="mx-auto max-w-5xl px-4 pb-10 pt-2" aria-label={t.cities}>
-        <h2 className="mb-3 flex items-center gap-2 text-base font-extrabold">
-          <span aria-hidden className="h-5 w-1 rounded-full bg-gradient-to-b from-shop to-rider" />
-          {t.cities}
-        </h2>
-        <div className="grid grid-cols-3 gap-2 sm:grid-cols-4 md:grid-cols-6">
-          {CITIES.filter((c) => c !== ALL).slice(0, 24).map((c) => (
-            <Link
-              key={c}
-              href={`/${lang}/city/${encodeURIComponent(c)}`}
-              className="flex items-center justify-center gap-1 rounded-xl border border-line bg-panel px-2 py-2.5 text-sm font-semibold text-fg/90 transition hover:border-shop hover:bg-shop/10"
-            >
-              <span aria-hidden className="text-xs">📍</span>
-              <span className="truncate">{c}</span>
-            </Link>
-          ))}
+        <div className="overflow-hidden rounded-2xl border border-line bg-panel">
+          <div className="flex items-center justify-between gap-4 p-4">
+            <div className="min-w-0">
+              <h2 className="flex items-center gap-2 text-lg font-extrabold">
+                <span aria-hidden className="h-5 w-1 rounded-full bg-gradient-to-b from-shop to-rider" />
+                {t.cities}
+              </h2>
+              <p className="mt-1 text-sm leading-relaxed text-mute">{t.citiesSub}</p>
+              <span className="mt-3 inline-block rounded-full bg-rider/15 px-3 py-1 text-xs font-bold text-orange-300">{t.citiesBadge}</span>
+            </div>
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src="/morocco-map.png" alt="" width={522} height={583} className="h-36 w-auto shrink-0 drop-shadow-[0_0_24px_rgba(234,88,12,0.25)]" />
+          </div>
+          <div className="grid grid-cols-3 gap-2 border-t border-line p-3 sm:grid-cols-4 md:grid-cols-6">
+            {CITIES.filter((c) => c !== ALL).slice(0, 24).map((c) => (
+              <Link
+                key={c}
+                href={`/${lang}/city/${encodeURIComponent(c)}`}
+                className="flex items-center justify-center gap-1 rounded-xl border border-line bg-ink px-2 py-2.5 text-sm font-semibold text-fg/90 transition hover:border-shop hover:bg-shop/10"
+              >
+                <span aria-hidden className="text-xs">📍</span>
+                <span className="truncate">{c}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </nav>
     </>
