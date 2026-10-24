@@ -15,6 +15,8 @@ const ar = {
   eLimit: 'وصلتي للحد الأقصى (5 إعلانات). احذف إعلان قديم.', eFail: 'تعذر نشر الإعلان. عاود المحاولة.',
   wait: 'جاري الاتصال بالسيرفر...', req: 'طلب توصيل', off: 'عرض توصيل', now: 'الآن',
   foot: 'الإعلان كيتحيد بعد 7 أيام.',
+  hero: 'اربط محلك بليفرور في دقائق',
+  chips: ['مجاني 100٪', 'جميع مدن المغرب', 'تواصل مباشر بلا وسيط'],
 };
 const fr: typeof ar = {
   tag: 'La plateforme qui relie commerçants et livreurs',
@@ -30,6 +32,8 @@ const fr: typeof ar = {
   eLimit: 'Limite atteinte (5 annonces). Supprimez-en une.', eFail: 'Échec de la publication. Réessayez.',
   wait: 'Connexion au serveur...', req: 'Demande de livraison', off: 'Offre de livraison', now: "à l'instant",
   foot: 'Les annonces expirent après 7 jours.',
+  hero: 'Connectez votre commerce à un livreur en quelques minutes',
+  chips: ['100 % gratuit', 'Toutes les villes du Maroc', 'Contact direct sans intermédiaire'],
 };
 export const T = { ar, fr };
 export const roleLabel = (l: Lang, r: string) => (r === OFFER ? T[l].off : T[l].req);
