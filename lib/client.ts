@@ -1,4 +1,5 @@
 import { initializeApp, getApps } from 'firebase/app';
+import { initializeAppCheck, ReCaptchaV3Provider } from 'firebase/app-check';
 import { getAuth, signInAnonymously, onAuthStateChanged } from 'firebase/auth';
 import { getFirestore, collection, doc, setDoc, deleteDoc, query, where, orderBy, limit, onSnapshot, getDocs, Timestamp } from 'firebase/firestore';
 import { Ad, ALL, TTL, cleanAds, isFresh } from './ads';
@@ -6,7 +7,16 @@ const cfg = {
   apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY, authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN,
   projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID, appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID,
 };
-const app = () => getApps()[0] ?? initializeApp(cfg);
+const app = () => {
+  if (getApps().length) return getApps()[0];
+  const a = initializeApp(cfg);
+  // App Check (reCAPTCHA v3): يحمي Firestore من السكريبتات. كيشتغل غير إلا كان المفتاح موجود
+  const siteKey = process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY;
+  if (siteKey && typeof window !== 'undefined') {
+    try { initializeAppCheck(a, { provider: new ReCaptchaV3Provider(siteKey), isTokenAutoRefreshEnabled: true }); } catch {}
+  }
+  return a;
+};
 const db = () => getFirestore(app());
 
 // Anonymous sign-in, same as the Android app
@@ -16,7 +26,7 @@ export const watchUid = (cb: (u: string | null) => void) => {
 };
 export const watchAds = (city: string, cb: (l: Ad[]) => void, err: (e: Error) => void) => {
   const base = collection(db(), 'ads');
-  const q = city === ALL ? query(base, orderBy('createdAt', 'desc'), limit(100)) : query(base, where('city', '==', city), limit(100));
+  const q = city === ALL ? query(base, orderBy('createdAt', 'desc'), limit(100)) : query(base, where('city', '==', city), orderBy('createdAt', 'desc'), limit(100));
   return onSnapshot(q, (s) => cb(cleanAds(s.docs.map((d) => ({ ...d.data(), id: d.id }) as Ad))), err);
 };
 export const myAdsCount = async (uid: string) =>
