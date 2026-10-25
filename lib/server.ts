@@ -4,7 +4,7 @@ const val = (x: any) => (x == null ? undefined : x.stringValue ?? (x.integerValu
 export async function fetchAds(city?: string): Promise<Ad[]> {
   const q: any = { from: [{ collectionId: 'ads' }], limit: 100 };
   if (city && city !== ALL) q.where = { fieldFilter: { field: { fieldPath: 'city' }, op: 'EQUAL', value: { stringValue: city } } };
-  else q.orderBy = [{ field: { fieldPath: 'createdAt' }, direction: 'DESCENDING' }];
+  q.orderBy = [{ field: { fieldPath: 'createdAt' }, direction: 'DESCENDING' }];
   try {
     const r = await fetch(
       `https://firestore.googleapis.com/v1/projects/${process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID}/databases/(default)/documents:runQuery`,
