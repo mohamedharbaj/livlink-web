@@ -14,3 +14,9 @@ Next.js 14 + TypeScript + Tailwind, connected to the same Firebase project as th
 3. Firebase Console, Authentication, Settings, Authorized domains: add your `*.vercel.app` domain.
    Without this, anonymous sign-in fails and publishing will not work.
 4. Set `NEXT_PUBLIC_SITE_URL` to the deployed URL and redeploy (enables the sitemap).
+
+## Before first deploy (important order)
+1. Deploy the Firestore index first (`firestore.indexes.json` lives in the Android repo): `firebase deploy --only firestore`.
+   The city queries use `city` + `createdAt` and fail without this index.
+2. (Optional but recommended) App Check: register the web app with reCAPTCHA v3 in Firebase Console, then set `NEXT_PUBLIC_RECAPTCHA_SITE_KEY`.
+3. Run `npm install` once and commit the generated `package-lock.json`.
